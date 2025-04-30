@@ -30,8 +30,8 @@ const Login = () => {
   };
 
     return (
-      <div className="p-8 justify-center items-center flex flex-col h-screen">
-        <div className="w-1/4 p-6 h-screen bg-[#696969] flex flex-col justify-center">
+      <div className="bg-[#ffffff] p-8 justify-center items-center flex flex-col h-screen">
+        <div className="w-1/4 p-6 h-3/4 bg-gray-400 flex flex-col justify-center rounded-2xl">
             <h2 className="text-3xl font-bold mb-6 text-center">Seja Bem Vindo!</h2>
             <p className="mb-2">Acesse sua conta e domine seu mercado</p>
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -48,7 +48,7 @@ const Login = () => {
                 className="block w-full p-2 border rounded"
               />
               {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-              <button type="submit" className="block mx-auto text-black px-4 py-2 rounded" disabled={isSubmitting}>
+              <button type="submit" className="block mx-auto text-black px-4 py-2 rounded hover:bg-gray-500 transition duration-300 ease-in-out bg-gray-300" disabled={isSubmitting}>
                 Login
               </button>
             </form>
