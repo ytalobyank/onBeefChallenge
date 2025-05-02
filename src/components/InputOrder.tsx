@@ -1,15 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import OrderModal from './OrderModal';
 
 const InputOrder = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null); // Tipo correto aqui
 
   return (
-    <>
+    <div className="flex justify-center">
       <button
-        ref={buttonRef}
-        className="text-black px-4 py-2 mt-6 rounded hover:bg-gray-500 transition duration-300 ease-in-out bg-gray-300"
+        className="text-black px-4 py-2 rounded hover:bg-gray-500 transition duration-300 ease-in-out bg-gray-300"
         onClick={() => setIsModalOpen(true)}
       >
         Novo pedido
@@ -17,9 +15,8 @@ const InputOrder = () => {
       <OrderModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        buttonRef={buttonRef} 
       />
-    </>
+    </div>
   );
 };
 

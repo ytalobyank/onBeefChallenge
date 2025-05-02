@@ -1,21 +1,64 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-type Order = {
-  id: number;
+export type Pedido = {
+  id: string;
   nome: string;
   telefone: string;
   descricao: string;
+  status: 'pendente' | 'aceito' | 'rejeitado';
 };
 
 type OrderStore = {
-  pedidos: Order[];
-  adicionarPedido: (pedido: Omit<Order, 'id'>) => void;
+  pedidos: Pedido[];
+  adicionarPedido: (pedido: Omit<Pedido, 'id' | 'status'>) => void;
+  editarPedido: (pedido: Pedido) => void;
+  removerPedido: (id: string) => void;
+  aceitarPedido: (id: string) => void;
+  rejeitarPedido: (id: string) => void;
 };
 
-export const useOrderStore = create<OrderStore>((set) => ({
-  pedidos: [],
-  adicionarPedido: (pedido) =>
-    set((state) => ({
-      pedidos: [...state.pedidos, { ...pedido, id: Date.now() }],
-    })),
-}));
+export const useOrderStore = create<OrderStore>()(
+  persist(
+    (set) => ({
+      pedidos: [],
+      adicionarPedido: (pedidoSemId) =>
+        set((state) => ({
+          pedidos: [
+            ...state.pedidos,
+            {
+              id: crypto.randomUUID(),
+              status: 'pendente',
+              ...pedidoSemId,
+            },
+          ],
+        })),
+      editarPedido: (pedidoAtualizado) =>
+        set((state) => ({
+          pedidos: state.pedidos.map((p) =>
+            p.id === pedidoAtualizado.id ? { ...p, ...pedidoAtualizado } : p
+          ),
+        })),
+      removerPedido: (id) =>
+        set((state) => ({
+          pedidos: state.pedidos.filter((p) => p.id !== id),
+        })),
+      aceitarPedido: (id) =>
+        set((state) => ({
+          pedidos: state.pedidos.map((p) =>
+            p.id === id ? { ...p, status: 'aceito' } : p
+          ),
+        })),
+      rejeitarPedido: (id) =>
+        set((state) => ({
+          pedidos: state.pedidos.map((p) =>
+            p.id === id ? { ...p, status: 'rejeitado' } : p
+          ),
+        })),
+    }),
+    {
+      name: 'pedido-storage',
+      partialize: (state) => ({ pedidos: state.pedidos }), 
+    }
+  )
+);

@@ -1,23 +1,39 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import PublicRoute from './components/PublicRoute';
+import Protect from './components/protect';
 import { useAuthStore } from './store/auth';
 
+
 const App: React.FC = () => {
-
-  const user = useAuthStore((state) => state.user);
-
-  if (!user) {
-    return <Login />;
-  }
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn());
   return (
-    <div>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/home"
+        element={
+          <Protect>
+            <Home />
+          </Protect>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          isLoggedIn ? <Navigate to="/home" /> : <Navigate to="/login" />
+        }
+      />
+    </Routes>
   );
 };
 
-export default App
+export default App;
