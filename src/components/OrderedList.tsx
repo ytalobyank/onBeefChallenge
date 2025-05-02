@@ -28,6 +28,7 @@ const OrderedList = () => {
 
   const handleRejeitarPedido = (id: string) => {
     useOrderStore.getState().rejeitarPedido(id);
+    useOrderStore.getState().resetPedidos();
     queryClient.invalidateQueries({ queryKey: ['pedidos'] });
   };
 
