@@ -7,6 +7,7 @@ import Dashboard from '../components/Dashboard';
 const Home = () => {
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
 
   const handleLogout = () => {
     logout();
@@ -15,29 +16,45 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full min-h-screen p-6 bg-[#1a1a1adc] flex flex-col justify-start items-center">
-      <div className="bg-gray-200 w-full p-6 h-1/4 flex flex-col justify-center items-center rounded-2xl shadow-lg">
-        <h2 className="text-black text-3xl font-bold text-center">Desafio Onbeef</h2>
-      </div>
-
-      <div className="flex w-full items-center mt-4 relative">
-        <div className="absolute left-0">
-          <button
-            onClick={handleLogout}
-            className="px-6 py-2 bg-red-500 text-white rounded-2xl hover:bg-red-700 transition"
-          >
-            Logout
-          </button>
+    <div className="min-h-screen bg-gray-900 text-white">
+      {/* Header */}
+      <header className="bg-gray-800 shadow-md">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white">Desafio OnBeef</h1>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <span className="block text-sm text-gray-300">Bem-vindo</span>
+              <span className="font-medium">{user?.name || 'Usuário'}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="btn-danger text-sm px-3 py-1.5"
+            >
+              Sair
+            </button>
+          </div>
         </div>
+      </header>
 
-        <div className="mx-auto">
+      {/* Main content */}
+      <main className="container mx-auto px-4 py-8">
+        {/* New order section */}
+        <section className="mb-8 flex justify-center">
           <InputOrder />
-        </div>
-      </div>
+        </section>
 
-      <div className="w-full flex flex-row justify-around gap-4 mt-6">
-        <Dashboard />
-      </div>
+        {/* Dashboard */}
+        <section>
+          <Dashboard />
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 py-4 mt-auto">
+        <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
+          &copy; {new Date().getFullYear()} OnBeef - Gestão de Pedidos
+        </div>
+      </footer>
     </div>
   );
 };
