@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type Pedido = {
+export type Order = {
   id: string;
   nome: string;
   telefone: string;
@@ -10,24 +10,24 @@ export type Pedido = {
 };
 
 type OrderStore = {
-  pedidos: Pedido[];
-  adicionarPedido: (pedido: Omit<Pedido, 'id' | 'status'>) => void;
-  editarPedido: (pedido: Pedido) => void;
-  removerPedido: (id: string) => void;
-  aceitarPedido: (id: string) => void;
-  rejeitarPedido: (id: string) => void;
-  resetPedidos: () => void;
+  orders: Order[];
+  addOrder: (pedido: Omit<Order, 'id' | 'status'>) => void;
+  editOrder: (pedido: Order) => void;
+  removeOrder: (id: string) => void;
+  acceptOrder: (id: string) => void;
+  rejectOrder: (id: string) => void;
+  resetOrder: () => void;
 };
 
 
 export const useOrderStore = create<OrderStore>()(
   persist(
     (set) => ({
-      pedidos: [],
-      adicionarPedido: (pedidoSemId) =>
+      orders: [],
+      addOrder: (pedidoSemId) =>
         set((state) => ({
-          pedidos: [
-            ...state.pedidos,
+          orders: [
+            ...state.orders,
             {
               id: crypto.randomUUID(),
               status: 'pendente',
@@ -35,37 +35,37 @@ export const useOrderStore = create<OrderStore>()(
             },
           ],
         })),
-      editarPedido: (pedidoAtualizado) =>
+      editOrder: (pedidoAtualizado) =>
         set((state) => ({
-          pedidos: state.pedidos.map((p) =>
+          orders: state.orders.map((p) =>
             p.id === pedidoAtualizado.id ? { ...p, ...pedidoAtualizado } : p
           ),
         })),
-      removerPedido: (id) =>
+      removeOrder: (id) =>
         set((state) => ({
-          pedidos: state.pedidos.filter((p) => p.id !== id),
+          orders: state.orders.filter((p) => p.id !== id),
         })),
-      aceitarPedido: (id) =>
+      acceptOrder: (id) =>
         set((state) => ({
-          pedidos: state.pedidos.map((p) =>
+          orders: state.orders.map((p) =>
             p.id === id ? { ...p, status: 'aceito' } : p
           ),
         })),
-      rejeitarPedido: (id) =>
+      rejectOrder: (id) =>
         set((state) => ({
-          pedidos: state.pedidos.map((p) =>
+          orders: state.orders.map((p) =>
             p.id === id ? { ...p, status: 'rejeitado' } : p
           ),
         })),
 
-      resetPedidos: () =>
+      resetOrder: () =>
         set(() => ({
-          pedidos: [],
+          orders: [],
         })),
     }),
     {
       name: 'pedido-storage',
-      partialize: (state) => ({ pedidos: state.pedidos }),
+      partialize: (state) => ({ pedidos: state.orders }),
     }
   )
 );

@@ -30,8 +30,8 @@ const OrderModal = ({ isOpen, onClose, pedidoParaEditar }: Props) => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const adicionarPedido = useOrderStore((state) => state.adicionarPedido);
-  const editarPedido = useOrderStore((state) => state.editarPedido);
+  const adicionarPedido = useOrderStore((state) => state.addOrder);
+  const editarPedido = useOrderStore((state) => state.editOrder);
   const queryClient = useQueryClient();
 
   useEffect(() => {

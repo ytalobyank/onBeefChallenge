@@ -10,7 +10,7 @@ const Home = () => {
 
   const handleLogout = () => {
     logout();
-    useOrderStore.getState().resetPedidos();
+    useOrderStore.getState().resetOrder();
     navigate('/login');
   };
 

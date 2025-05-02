@@ -4,7 +4,6 @@ import { login, LoginResponse, LoginInput } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth';
 
-
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
@@ -14,9 +13,10 @@ const Login = () => {
   const { mutate } = useMutation<LoginResponse, Error, LoginInput>({
     mutationFn: login,
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({ id: data.id, name: data.name, email: data.email }));
-      setUser({ id: data.id, name: data.name, email: data.email });
+      setUser(
+        { id: data.id, name: data.name, email: data.email },
+        data.token
+      );
       navigate('/home');
     },
     onError: (error) => {

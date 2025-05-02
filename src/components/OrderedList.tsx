@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pedido, useOrderStore } from '../store/order';
+import { Order, useOrderStore } from '../store/order';
 import OrderModal from './OrderModal';
 import { useOrderQuery } from '../api/order';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,9 +9,9 @@ const OrderedList = () => {
   const { data: pedidos = [] } = useOrderQuery();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pedidoParaEditar, setPedidoParaEditar] = useState<Pedido | undefined>(undefined);
+  const [pedidoParaEditar, setPedidoParaEditar] = useState<Order | undefined>(undefined);
 
-  const handleAbrirModal = (pedido: Pedido) => {
+  const handleAbrirModal = (pedido: Order) => {
     setPedidoParaEditar(pedido);
     setIsModalOpen(true);
   };
@@ -22,13 +22,12 @@ const OrderedList = () => {
   };
 
   const handleAceitarPedido = (id: string) => {
-    useOrderStore.getState().aceitarPedido(id);
+    useOrderStore.getState().acceptOrder(id);
     queryClient.invalidateQueries({ queryKey: ['pedidos'] });
   };
 
   const handleRejeitarPedido = (id: string) => {
-    useOrderStore.getState().rejeitarPedido(id);
-    useOrderStore.getState().resetPedidos();
+    useOrderStore.getState().rejectOrder(id);
     queryClient.invalidateQueries({ queryKey: ['pedidos'] });
   };
 
@@ -49,7 +48,7 @@ const OrderedList = () => {
             className="p-4 rounded shadow bg-gray-100 relative"
           >
             <div
-              className="cursor-pointer"
+              className="cursor-pointer hover:bg-gray-200"
               onClick={() => handleAbrirModal(pedido)}
             >
               <p><strong>Nome:</strong> {pedido.nome}</p>
