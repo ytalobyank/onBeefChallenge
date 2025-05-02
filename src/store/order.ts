@@ -16,7 +16,9 @@ type OrderStore = {
   removerPedido: (id: string) => void;
   aceitarPedido: (id: string) => void;
   rejeitarPedido: (id: string) => void;
+  resetPedidos: () => void;
 };
+
 
 export const useOrderStore = create<OrderStore>()(
   persist(
@@ -55,10 +57,15 @@ export const useOrderStore = create<OrderStore>()(
             p.id === id ? { ...p, status: 'rejeitado' } : p
           ),
         })),
+
+      resetPedidos: () =>
+        set(() => ({
+          pedidos: [],
+        })),
     }),
     {
       name: 'pedido-storage',
-      partialize: (state) => ({ pedidos: state.pedidos }), 
+      partialize: (state) => ({ pedidos: state.pedidos }),
     }
   )
 );

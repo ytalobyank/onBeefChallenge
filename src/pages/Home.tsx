@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import InputOrder from "../components/InputOrder";
+import { useOrderStore } from '../store/order';
 import { useAuthStore } from '../store/auth';
 import Dashboard from '../components/Dashboard';
 
@@ -9,6 +10,7 @@ const Home = () => {
 
   const handleLogout = () => {
     logout();
+    useOrderStore.getState().resetPedidos();
     navigate('/login');
   };
 
