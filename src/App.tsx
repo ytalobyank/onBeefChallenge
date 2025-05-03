@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import PublicRoute from './components/PublicRoute';
-import Protect from './components/protect';
+import Protect from './components/Protect';
 import { useAuthStore } from './store/auth';
 
 
